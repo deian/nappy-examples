@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8"></head>
+  <body>
+    <div id="log"></div>
+    <script type="text/javascript">
+      function log(msg) {
+        var d = document.createElement("div");
+        d.appendChild(document.createTextNode(msg));
+        document.getElementById("log").appendChild(d);
+        console.log(msg);
+      }
+
+      log("loc = " + document.location.origin)
+
+      var blob = new Blob([
+          'var req = new XMLHttpRequest();'
+          +'req.onload = function() { '
+          +'  postMessage(this.responseText);'
+          +'};'
+          +'req.open("get", "http://a.lvh.me:3000/", false);'
+          +'req.send();']);
+
+      var blobURL = window.URL.createObjectURL(blob);
+      var w = new Worker(blobURL);
+
+      w.onmessage = function (oEvent) {
+        log("Called back by the worker: " + oEvent.data);
+      };
+    </script>
+  </body>
+</html>

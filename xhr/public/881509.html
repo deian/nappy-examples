@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8"></head>
+  <body>
+    parent
+    <iframe src="/881509_iframe.html" id="frame"> </iframe>
+    <script type="text/javascript">
+    window.addEventListener("message", main, false);
+    function main(event) {
+      console.log("main:"+event.origin+":"+event.data);
+    }
+    function doit() {
+      w = document.getElementById("frame").contentWindow.w;
+      w.addEventListener("message", main, false);
+      document.getElementById("frame").contentWindow.postMessage("leave","*");
+      setTimeout(w.postMessage("woot"),1000);
+    }
+    setTimeout(doit,5000);
+    </script>
+  </body>
+</html>

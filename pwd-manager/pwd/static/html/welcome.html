@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+  <head> 
+    <title>PwdManager - Untrusted password manager</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
+    <script>
+      $(function() {
+        function init(event) {
+          console.log("Got message from: " + event.origin)
+          console.log("Got message: " + event.data);
+        }
+
+        window.addEventListener("mesage",init, false);
+
+        $("#use-pwd-manager").click(function() {
+        });
+      });
+    </script>
+    <div id="use-pwd-manager">Use PwdManager</div>
+  </body>
+</html>

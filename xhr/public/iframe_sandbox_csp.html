@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8"></head>
+  <body>
+    <!-- open in a.lvh.me -->
+    <!-- apply csp in a.lvh.me -->
+    <div>normal:</div>
+    <iframe src="http://a.lvh.me:3000/iframe_sandbox_csp_inner.html"> </iframe>
+    <div>sandboxed:</div>
+    <iframe src="http://a.lvh.me:3000/iframe_sandbox_csp_inner.html" sandbox> </iframe>
+    <div>sandboxed same-origin:</div>
+    <iframe src="http://a.lvh.me:3000/iframe_sandbox_csp_inner.html" sandbox="allow-same-origin"> </iframe>
+    <div></div>
+    <img src="https://mozorg.cdn.mozilla.net/media/img/home/firefox.png">
+  </body>
+</html>

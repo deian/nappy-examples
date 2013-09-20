@@ -1,0 +1,31 @@
+
+<!DOCTYPE HTML>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv='document-label' CONTENT='[["a","b"],["c"]]'>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script type="text/javascript" privileged>
+      var origin = window.location.origin;
+      Sandbox.privileges = __privilege__;
+      function log(msg) {
+        var d = document.createElement("div");
+        d.appendChild(document.createTextNode(msg));
+        document.getElementById("log").appendChild(d);
+        console.log(msg);
+      }
+      function printCurLabel(nr) {
+        log(nr+': { LABEL: '+Sandbox.getPrivacyLabel() + ', ' +
+                             Sandbox.getTrustLabel()+
+               '; CLEAR: '+Sandbox.getPrivacyClearance() + ', ' + 
+                              Sandbox.getTrustClearance()+'}'+
+               '; PRIVS: '+Sandbox.privileges
+           )
+      }
+
+     printCurLabel(0);
+    </script>
+  </body>
+</html>

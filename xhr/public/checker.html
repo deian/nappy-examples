@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8"></head>
+  <body>
+    <div id="log"></div>
+    <form id="check-form">
+      <label>Password: <input id="password" type="text"> </label>
+      <button id="check">Check!</button>
+      <span id="score"></span>
+    </form>
+    <!-- <script
+src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+    <script src="/jquery.min.js"></script>
+    <script type="text/javascript" privileged>
+      Sandbox.privileges = __privilege__;
+      $(function() {
+      function log(msg) {
+        var d = document.createElement("div");
+        d.appendChild(document.createTextNode(msg));
+        document.getElementById("log").appendChild(d);
+        console.log(msg);
+      }
+      function printCurLabel(nr) {
+        log(nr+': { LABEL: '+Sandbox.getPrivacyLabel() + ', ' + Sandbox.getTrustLabel()+
+            '; CLEAR: '+Sandbox.getPrivacyClearance() + ', ' + Sandbox.getTrustClearance()+'}')
+      }
+
+      var p = new FreshPrivilege();
+      Sandbox.own(p);
+      var box = new Sandbox(p.asLabel);
+      //either:
+      //box.scheduleURI('http://checker.lvh.me:3000/checker.js');
+      //or:
+      box.scheduleURI('http://checker.lvh.me:3000/checker2.js');
+
+
+      function checkPassword() {
+        console.log("checking...");
+        box.postMessage({password: $("#password").val()});
+        box.ondone(function() {
+          console.log(box.result.log);
+          var score = box.result.score;
+          var verdict = "";
+          if(score < 0) {
+             verdict = "failed"
+          } else if(score < 16) {
+             verdict = "very weak"
+          } else if (score > 15 && score < 25) {
+             verdict = "weak"
+          } else if (score > 24 && score < 35) {
+             verdict = "mediocre"
+          } else if (score > 34 && score < 45) {
+             verdict = "strong"
+          } else {
+             verdict = "stronger"
+          }
+	
+          $("#score").text(verdict);
+        });
+        return false;
+      }
+      $("#check").click(checkPassword);
+      $("#check-form").submit(checkPassword);
+
+      });
+
+    </script>
+  </body>
+</html>

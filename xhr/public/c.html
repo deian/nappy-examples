@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8"></head>
+  <body>
+    <div id="log"></div>
+    <script type="text/javascript" privileged>
+      Sandbox.privileges = __privilege__;
+      function log(msg) {
+        var d = document.createElement("div");
+        d.appendChild(document.createTextNode(msg));
+        document.getElementById("log").appendChild(d);
+        console.log(msg);
+      }
+      function printCurLabel() {
+        log('{ LABEL: '+Sandbox.getPrivacyLabel() + ', ' + Sandbox.getTrustLabel()+
+            '; CLEAR: '+Sandbox.getPrivacyClearance() + ', ' + Sandbox.getTrustClearance()+'}')
+      }
+      // Example 1:
+      var sAB = new Sandbox(new Label([new Role("a.com"), new Role("b.com")]));
+      printCurLabel(1);
+
+      sAB.schedule(
+       'var sA = new Sandbox(new Label(new Role("a.com")));'+
+       'sA.schedule("done({val : 3});");'+
+       'var sB = new Sandbox(new Label(new Role("b.com")));'+
+       'sB.schedule("done({val : 4});");'+
+       'sA.ondone(function() {'+
+       '  sB.ondone(function() {'+
+       '    done({val : sA.result.val + sB.result.val});'+
+       '    });});');
+      printCurLabel(2);
+      sAB.ondone(function() {
+          log("result = "+sAB.result.val)
+      });
+      printCurLabel(3);
+
+    </script>
+  </body>
+</html>

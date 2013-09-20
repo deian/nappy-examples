@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  </head>
+  <body>
+    <!-- a.lvh.me -->
+    <div id="log"></div>
+    <iframe src="http://b.lvh.me:3001/l_iframe.html" id="iframe" width="100%"></iframe>
+    <script type="text/javascript" privileged>
+      function log(msg) {
+        var d = document.createElement("div");
+        d.appendChild(document.createTextNode(msg));
+        document.getElementById("log").appendChild(d);
+        console.log(msg);
+      }
+      function printCurLabel(nr) {
+        log(nr+': { LABEL: '+Sandbox.getPrivacyLabel() + ', ' + Sandbox.getTrustLabel()+
+            '; CLEAR: '+Sandbox.getPrivacyClearance() + ', ' + Sandbox.getTrustClearance()+'}')
+      }
+      window.addEventListener("message", function(event) {
+          log("parent event from: "+event.origin+" = "+event.data);
+      }, false);
+      printCurLabel(0);
+      Sandbox.enableSandbox();
+      Sandbox.privileges = __privilege__;
+      printCurLabel(1);
+      Sandbox.setPrivacyLabel(new Label([ new Role("http://a.lvh.me:3000")
+                                        , new Role("http://b.lvh.me:3000")
+                                        //, new Role("http://c.lvh.me:3000")
+                                        ]));
+      printCurLabel(2);
+      setTimeout(function() {
+        printCurLabel(3);
+        document.getElementById("iframe")
+                .contentWindow.postMessage("ping", "http://b.lvh.me:3001");
+        printCurLabel(4);
+      }, 100);
+      printCurLabel(5);
+   </script>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+  <head> 
+    <title>PwdManager - Untrusted password manager</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <form id="master-key-form" action="#">
+      <label>Master password: <input id="master-key" type="password"> </label>
+      <input type="button" id="master-key-submit" value="Decrypt" disabled>
+    </form>
+    <script src="/static/js/jquery.min.js"></script>
+    <script privileged>
+      Sandbox.privileges = __privilege__;
+
+      //Sandbox.enableSandbox();
+
+      $(function() {
+        var pwdStorageURL = "http://storage.lvh.me:8082";
+
+        appRef = undefined;
+        appRefOrigin = undefined;
+
+        function main(event) {
+          console.log("pwd got message from: " + event.origin);
+          console.log("pwd got message status: " + event.data.status);
+
+          var status = event.data ? event.data.status : null;
+
+          if (status === "init") {
+            appRef = event.source;
+            appRefOrigin = event.origin;
+
+            var iframe = $('<iframe />', {
+              name: 'pwd-storage',
+              id:   'pwd-storage',
+              src:   pwdStorageURL+'/'+btoa(appRefOrigin)
+            });
+            iframe.attr("seamless","true");
+            iframe.appendTo('body');
+            $("#master-key-submit").removeAttr("disabled");
+
+            try{ //ok
+              var req = new XMLHttpRequest();
+              req.onload = function() {
+                console.log("onload");//+this.response);
+              };
+              req.open("get", "http://a.lvh.me:3000/ok", true);
+              req.send();
+              console.log("req sent");
+            } catch (e) {
+              console.log("req failed "+e);
+            }
+
+            // raise label
+            // Make sure that the storage frame label is pwd /\ storage
+            Sandbox.setPrivacyLabel(new Label([new Role(appRefOrigin),
+                                               new Role(window.location.origin)]));
+            console.log("pwd principal: "+Sandbox.getPrincipal()+'');
+            console.log("pwd privs: "+Sandbox.privileges+'');
+            console.log("pwd label: "+Sandbox.getPrivacyLabel()+'');
+
+            try{ //fail
+              var req = new XMLHttpRequest();
+              req.onload = function() {
+                console.log("onload");//+this.response);
+              };
+              req.open("get", "http://a.lvh.me:3000/fail", true);
+              req.send();
+              console.log("req sent");
+            } catch (e) {
+              console.log("req failed "+e);
+            }
+
+            function sendMasterKey() {
+
+
+              var master_password = $("#master-key").val();
+              console.log("pwd sending master key...");
+              try {
+                window.frames[0].postMessage({ status: "decrypt"
+                                             , password: master_password }
+                                             , "*");
+              } catch(e) {
+                console.log("pwd failed to send message to "+pwdStorageURL+": "+e);
+              }
+            }
+
+            $("#master-key-submit").click(sendMasterKey);
+            $("#master-key-form").submit(sendMasterKey);
+
+          } else if (status === "done") {
+            //if (event.origin !== pwdStorageURL) { return; }
+
+            var u = event.data.username,
+                p = event.data.password;
+
+            console.log("u = "+u+", p="+p);
+            console.log("pwd sending message to fb:"+!(appRef==null));
+            console.log("event.origin="+event.origin);
+
+
+            // lower label
+            Sandbox.setPrivacyLabel(new Label(appRefOrigin));
+
+            try {
+              appRef.postMessage({ username: u
+                                 , password: p }, "*");
+              //window.close();
+            } catch(e) {
+              console.log("pwd failed to send message to "+appRefOrigin+": "+e);
+            }
+          }
+        }
+        window.addEventListener("message", main, false);
+      });
+    </script>
+  </body>
+</html>

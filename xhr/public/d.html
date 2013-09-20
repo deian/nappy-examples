@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8"></head>
+  <body>
+    <div id="log"></div>
+    <script type="text/javascript" privileged>
+      Sandbox.privileges = __privilege__;
+      function log(msg) {
+        var d = document.createElement("div");
+        d.appendChild(document.createTextNode(msg));
+        document.getElementById("log").appendChild(d);
+        console.log(msg);
+      }
+      function printCurLabel(nr) {
+        log(nr+': { LABEL: '+Sandbox.getPrivacyLabel() + ', ' + Sandbox.getTrustLabel()+
+            '; CLEAR: '+Sandbox.getPrivacyClearance() + ', ' + Sandbox.getTrustClearance()+'}')
+      }
+      var sA = new Sandbox(new Label(new Role("a.com")));
+      printCurLabel(0);
+
+      sA.schedule(
+       'try {'+
+       'onmessage(function () {'+
+       '  done({val : 42, vax : "label: "+Sandbox.getPrivacyLabel()+":"+message.woot});'+
+       '  });'+
+       '} catch(e) {'+
+       '  done({val : 1337, vax: "fail" });'+
+       '}'
+       );
+
+      printCurLabel(1);
+
+      sA.postMessage({woot:"what"});
+
+      printCurLabel(2);
+      sA.ondone(function() {
+          printCurLabel(3);
+          log("result = "+sA.result.vax)
+      });
+      printCurLabel(4);
+
+
+    </script>
+  </body>
+</html>

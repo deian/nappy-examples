@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8"></head>
+  <body>
+  kid
+  <script type="text/javascript">
+
+  window.addEventListener("message", main, false);
+  function main(event) {
+    console.log("frame:"+event.origin+":"+event.data);
+    if(event.data=="leave") {
+      window.location="http://a.lvh.me:3000";
+    }
+  }
+  var w = new Worker("881509_worker.js");
+  //w.addEventListener("message", main, false);
+
+
+  </script>
+  </body>
+</html>

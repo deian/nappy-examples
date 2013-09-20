@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+  <head> 
+    <title>Faceboot</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <form id="login-form">
+      <label>Username: <input id="fb-username" type="text"> </label>
+      <label>Password: <input id="fb-password" type="password"> </label>
+      <input type="submit" value="Login">
+    </form>
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" privileged id="main">
+      function Sealer() {
+        var priv = __privilege__;
+        delete __privilege__;
+        document.getElementById("main").text = "";
+        return { get : function(k) {
+                         if (k === "magic1337") {
+                           return priv;
+                         } else {
+                           return (new Privilege());
+                         }
+                       }
+               , set : function(p) { priv = p }
+               }
+      }
+      var sealer = new Sealer();
+      $(function() {
+        var pwdManagerURL = "http://pwd.lvh.me:8081"
+
+        function getLoginInfo(event) {
+          console.log("fb got message from:"+event.origin);
+          //if (event.origin !== pwdManagerURL) { return; }
+          if (event.data.username) {
+            $("#fb-username").val(event.data.username);
+          }
+          if (event.data.password) {
+            $("#fb-password").val(event.data.password);
+          }
+          Sandbox.own(sealer.get("magic1337"));
+          Sandbox.setPrivacyLabel(new Label());
+          Sandbox.privileges = new Privilege();
+
+          console.log("fb principal: "+Sandbox.getPrincipal()+'');
+          console.log("fb privs: "+Sandbox.privileges+'');
+          console.log("fb label: "+Sandbox.getPrivacyLabel()+'');
+        }
+
+        window.addEventListener("message", getLoginInfo, false);
+
+        $("#use-pwd-manager").click(function() {
+          pwd = window.open(pwdManagerURL);
+          //console.log(pwd.location+'');
+          window.setTimeout(function() {
+            pwd.postMessage({status: "init"}, pwdManagerURL);
+            // raise label:
+            Sandbox.setPrivacyLabel(new Label(new Role(window.location.origin)));
+            console.log("fb principal: "+Sandbox.getPrincipal()+'');
+            console.log("fb privs: "+Sandbox.privileges+'');
+            console.log("fb label: "+Sandbox.getPrivacyLabel()+'');
+          },1000);
+        });
+      });
+    </script>
+    <div id="use-pwd-manager">Use password manager</div>
+  </body>
+</html>

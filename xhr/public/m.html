@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8"></head>
+  <body>
+  <a href="/e.html"> Should be the same as e.html [ this should not
+    navigate if it works correctly ]</a>
+  <a href="http://www.google.com"> nav to google should fail </a>
+    <div id="log"></div>
+    <script type="text/javascript" privileged>
+      Sandbox.privileges = __privilege__;
+      function log(msg) {
+        var d = document.createElement("div");
+        d.appendChild(document.createTextNode(msg));
+        document.getElementById("log").appendChild(d);
+        console.log(msg);
+      }
+      function printCurLabel(nr) {
+        log(nr+': { LABEL: '+Sandbox.getPrivacyLabel() + ', ' + Sandbox.getTrustLabel()+
+            '; CLEAR: '+Sandbox.getPrivacyClearance() + ', ' + Sandbox.getTrustClearance()+'}')
+      }
+      var sA = new Sandbox(new Label(new Role("a.com")));
+      printCurLabel(1);
+
+      // same a e.html,but using scheduleURI
+      sA.scheduleURI('http://b.lvh.me:3001/m.js');
+
+      sA.ondone(function() {
+        printCurLabel(2);
+        log("val = "+sA.result)
+        printCurLabel(3);
+        log("val = "+sA.result.val)
+        printCurLabel(4);
+        log("vax = "+sA.result.vax)
+        printCurLabel(5);
+      });
+
+
+    </script>
+  </body>
+</html>

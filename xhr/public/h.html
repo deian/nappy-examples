@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  </head>
+  <body>
+    <div id="log"></div>
+    <script type="text/javascript" privileged>
+      Sandbox.privileges = __privilege__;
+      function log(msg) {
+        var d = document.createElement("div");
+        d.appendChild(document.createTextNode(msg));
+        document.getElementById("log").appendChild(d);
+        console.log(msg);
+      }
+      function printCurLabel(nr) {
+        log(nr+': { LABEL: '+Sandbox.getPrivacyLabel() + ', ' + Sandbox.getTrustLabel()+
+            '; CLEAR: '+Sandbox.getPrivacyClearance() + ', ' + Sandbox.getTrustClearance()+'}')
+      }
+
+      var sAB = new Sandbox(new Label([new Role("http://a.lvh.me:3000"), 
+                                       new Role("http://b.lvh.me:3001"),
+                                       new Role("http://c.lvh.me:3001")]));
+      printCurLabel(1);
+
+      sAB.schedule( 'done({val : 123 });');
+
+      log(Sandbox.getPrincipal()+" cookie: "+document.cookie);
+      document.cookie = "w00t=wat";
+       sAB.ondone(function() {
+           printCurLabel(2);
+           log("val: "+sAB.result.val);
+           document.body.appendChild(document.createTextNode("w00t"));
+           var img = document.createElement("img");
+           img.src="http://y.lvh.me:3000/logo4w.png";
+           document.body.appendChild(img);
+           try {
+             log("cookie: "+document.cookie);
+             document.cookie = "leet=1337";
+             log("cookie: "+document.cookie);
+           } catch(e) {
+             log(Sandbox.getPrincipal()+" failed to write to cookie in ondone!");
+           }
+       });
+       printCurLabel(3);
+       try {
+         log(Sandbox.getPrincipal()+" cookie: "+document.cookie);
+       } catch (e) {
+         log(Sandbox.getPrincipal()+" failed to write to cookie!");
+       }
+       printCurLabel(4);
+
+    </script>
+  </body>
+</html>
