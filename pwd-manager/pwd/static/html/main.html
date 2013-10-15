@@ -10,8 +10,7 @@
       <input type="button" id="master-key-submit" value="Decrypt" disabled>
     </form>
     <script src="/static/js/jquery.min.js"></script>
-    <script privileged>
-      Sandbox.privileges = __privilege__;
+    <script>
 
       //Sandbox.enableSandbox();
 
@@ -34,7 +33,7 @@
             var iframe = $('<iframe />', {
               name: 'pwd-storage',
               id:   'pwd-storage',
-              src:   pwdStorageURL+'/'+btoa(appRefOrigin)
+              src: pwdStorageURL+'/'+btoa(appRefOrigin)+'/'+btoa(window.location.origin)
             });
             iframe.attr("seamless","true");
             iframe.appendTo('body');
@@ -106,7 +105,7 @@
             try {
               appRef.postMessage({ username: u
                                  , password: p }, "*");
-              //window.close();
+              window.close();
             } catch(e) {
               console.log("pwd failed to send message to "+appRefOrigin+": "+e);
             }

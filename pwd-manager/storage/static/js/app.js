@@ -2,14 +2,13 @@ function decrypt(mp, data) {
   return data; 
 }
 
-function app(up, endpoint) {
+function app(up, endpoint, manager) {
   console.log("storage up: E(" + up.username + "@"+up.password+")");
   console.log("storage endpoint: " + endpoint);
 
   // Taint to storage /\ pwd
   Sandbox.enableSandbox();
   // can just pass in:
-  var manager = "http://pwd.lvh.me:8081";
   Sandbox.setPrivacyLabel(new Label([ new Role(endpoint)
                                     , new Role(manager)]));
   console.log("storage principal: "+Sandbox.getPrincipal()+'');

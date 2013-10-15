@@ -7,7 +7,7 @@
     <!-- a.lvh.me -->
     <div id="log"></div>
     <iframe src="http://b.lvh.me:3001/l_iframe.html" id="iframe" width="100%"></iframe>
-    <script type="text/javascript" privileged>
+    <script type="text/javascript">
       function log(msg) {
         var d = document.createElement("div");
         d.appendChild(document.createTextNode(msg));
@@ -23,7 +23,6 @@
       }, false);
       printCurLabel(0);
       Sandbox.enableSandbox();
-      Sandbox.privileges = __privilege__;
       printCurLabel(1);
       Sandbox.setPrivacyLabel(new Label([ new Role("http://a.lvh.me:3000")
                                         , new Role("http://b.lvh.me:3000")

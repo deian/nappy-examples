@@ -3,9 +3,8 @@
   <head> <meta charset="utf-8"></head>
   <body>
     <div id="log"></div>
-    <script type="text/javascript" privileged>
+    <script type="text/javascript">
       var origin = window.location.origin;
-      Sandbox.privileges = __privilege__;
       function log(msg) {
         var d = document.createElement("div");
         d.appendChild(document.createTextNode(msg));

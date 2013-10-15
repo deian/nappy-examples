@@ -12,8 +12,9 @@ import qualified Hails.Web.Frank as Frank
 
 server :: Application
 server = mkRouter $ do
-  Frank.get "/:id" $ do
-    endPt <- fromMaybe "" `liftM` queryParam "id"
+  Frank.get "/:end/:manager" $ do
+    endPt <- fromMaybe "" `liftM` queryParam "end"
+    manager <- fromMaybe "" `liftM` queryParam "manager"
     return $ okHtml $ fromString $ concat
       [ "<!DOCTYPE HTML>"
       , "<html>"
@@ -27,7 +28,7 @@ server = mkRouter $ do
       , "    <script>"
       , "    app({ username :" ++ show username
       , "        ,  password :" ++ show password
-      , "        }, atob(" ++ show endPt ++")"
+      , "        }, atob(" ++ show endPt ++"), atob(" ++ show manager ++")"
       , "       );"
       , "    </script>"
       , "    Got encrypted login info!"

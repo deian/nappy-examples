@@ -11,10 +11,8 @@
       <input type="submit" value="Login">
     </form>
     <script src="/static/js/jquery.min.js"></script>
-    <script type="text/javascript" privileged id="main">
+    <script type="text/javascript" id="main">
       function Sealer() {
-        var priv = __privilege__;
-        delete __privilege__;
         document.getElementById("main").text = "";
         return { get : function(k) {
                          if (k === "magic1337") {

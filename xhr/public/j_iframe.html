@@ -6,7 +6,7 @@
   <body>
     <!-- b.lvh.me -->
     <div id="log"></div>
-    <script type="text/javascript" privileged>
+    <script type="text/javascript">
       function log(msg) {
         var d = document.createElement("div");
         d.appendChild(document.createTextNode(msg));
@@ -14,7 +14,6 @@
         console.log(msg);
       }
       Sandbox.enableSandbox();
-      Sandbox.privileges = __privilege__;
       window.addEventListener("message", function(event) {
           log("iframe event from: "+event.origin+" = "+event.data);
           event.source.postMessage("pong", event.origin);

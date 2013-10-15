@@ -6,8 +6,7 @@
     navigate if it works correctly ]</a>
   <a href="http://www.google.com"> nav to google should fail </a>
     <div id="log"></div>
-    <script type="text/javascript" privileged>
-      Sandbox.privileges = __privilege__;
+    <script type="text/javascript">
       function log(msg) {
         var d = document.createElement("div");
         d.appendChild(document.createTextNode(msg));
