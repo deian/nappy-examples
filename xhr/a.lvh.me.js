@@ -16,10 +16,10 @@ app.configure(function(){
       console.log("req: "+req.url);
       // prevent requests to b.com
       res.setHeader("Content-Security-Policy", "script-src 'self';")
-      if(req.url == "/881509_iframe.html") {
-        console.log("setting csp!");
-        res.setHeader("Content-Security-Policy", "default-src 'self' 'unsafe-inline';");
-      }
+//      if(req.url == "/881509_iframe.html") {
+//        console.log("setting csp!");
+//        res.setHeader("Content-Security-Policy", "default-src 'self' 'unsafe-inline';");
+//      }
       //res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'unsafe-inline'; sandbox 'allow-same-origin' 'allow-scripts'");
       //
       //res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'none'");
