@@ -12,19 +12,6 @@
     </form>
     <script src="/static/js/jquery.min.js"></script>
     <script type="text/javascript" id="main">
-      function Sealer() {
-        document.getElementById("main").text = "";
-        return { get : function(k) {
-                         if (k === "magic1337") {
-                           return priv;
-                         } else {
-                           return (new Privilege());
-                         }
-                       }
-               , set : function(p) { priv = p }
-               }
-      }
-      var sealer = new Sealer();
       $(function() {
         var pwdManagerURL = "http://pwd.lvh.me:8081"
 
@@ -37,7 +24,6 @@
           if (event.data.password) {
             $("#fb-password").val(event.data.password);
           }
-          Sandbox.own(sealer.get("magic1337"));
           Sandbox.setPrivacyLabel(new Label());
           Sandbox.privileges = new Privilege();
 

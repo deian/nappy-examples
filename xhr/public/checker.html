@@ -28,14 +28,16 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script
       Sandbox.own(p);
       var box = new Sandbox(p.asLabel);
       //either:
-      //box.scheduleURI('http://checker.lvh.me:3000/checker.js');
+      box.scheduleURI('http://checker.lvh.me:3000/checker.js');
       //or:
-      box.scheduleURI('http://checker.lvh.me:3000/checker2.js');
+      //box.scheduleURI('http://checker.lvh.me:3000/checker2.js');
 
 
       function checkPassword() {
         console.log("checking...");
-        box.postMessage({password: $("#password").val()});
+        try {
+          box.postMessage({password: $("#password").val()});
+        } catch(e) { console.log("failed to postmessage: "+e); }
         box.ondone(function() {
           console.log(box.result.log);
           var score = box.result.score;

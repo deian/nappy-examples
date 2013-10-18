@@ -15,7 +15,7 @@ app.configure(function(){
     app.use(function(req, res, next) {
       console.log("req: "+req.url);
       // prevent requests to b.com
-      res.setHeader("Content-Security-Policy", "script-src 'self';")
+//      res.setHeader("Content-Security-Policy", "script-src 'self';")
 //      if(req.url == "/881509_iframe.html") {
 //        console.log("setting csp!");
 //        res.setHeader("Content-Security-Policy", "default-src 'self' 'unsafe-inline';");

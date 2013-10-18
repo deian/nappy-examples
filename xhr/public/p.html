@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  </head>
+  <body>
+    <p id="yo">
+    yoyo
+    </p>
+    <script type="text/javascript">
+    var s = new Sandbox(new Label(window.location.origin));
+
+    s.attachObject(window, "window");
+    s.attachObject(document, "document");
+    s.attachObject({log: function(x) { console.log("sbox-log: "+x); }}, "console");
+
+    s.schedule('var yo; try { yo = document.getElementById("yo").innerHTML; } catch (e) { yo = e }; try { console.log("should fail: yo="+yo); } catch(e) {}; done({res:"should fail yo="+yo});');
+    var retry = true;
+    s.ondone(function() { 
+        console.log("res = "+this.result.res);
+        if (retry) {
+          retry = false;
+          Sandbox.setPrivacyLabel(new Label(window.location.origin));
+          s.schedule('var yo; try { yo = document.getElementById("yo").innerHTML; } catch (e) { yo = e }; try { console.log("should ok: yo="+yo); } catch(e) {}; done({res:"should ok yo="+yo});');
+        }
+    });
+
+    </script>
+  </body>
+</html>
