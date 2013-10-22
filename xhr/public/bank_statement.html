@@ -13,8 +13,6 @@
     var app = new Sandbox(bankLabel);
     app.grant(Sandbox.privileges);
     app.attachObject(window, "window");
-    app.attachObject(console, "console");
-    app.attachObject(document, "document");
     app.scheduleURI("http://bank.lvh.me:3000/bank_app.js");
     // 2. drop privileges
     Sandbox.privileges = new Privilege();
