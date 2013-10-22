@@ -12,7 +12,7 @@
     var s = new Sandbox(new Label(window.location.origin));
     s.grant(Sandbox.privileges);
     s.attachObject(window, "window");
-    //s.attachObject($, "$");
+    s.attachObject($, "$");
     s.scheduleURI("http://a.lvh.me:3000/r.js");
 
     </script>

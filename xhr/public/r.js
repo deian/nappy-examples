@@ -1,6 +1,5 @@
 console = window.console;
 document = window.document;
-$ = window.$;
 
 $.get("/")
  .done(function(data) {
