@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  </head>
+  <body>
+    <script type="text/javascript" src="http://a.lvh.me:3000/jquery.min.js"></script>
+    <script type="text/javascript">
+ //   $(document).ready(function() {
+
+      console.log("privs="+Sandbox.privileges);
+      console.log("label="+Sandbox.getPrivacyLabel());
+
+      var label = new Label(window.location.origin);
+      // 1. create privileged sandbox
+      var app = new Sandbox(label);
+      app.grant(Sandbox.privileges);
+      app.attachObject(window, "window");
+      app.attachObject($, "$");
+      app.scheduleURI("http://a.lvh.me:3000/q.js");
+      // 2. drop privileges
+      Sandbox.privileges = new Privilege();
+      // 3. raise current label & clearance
+      Sandbox.setPrivacyLabel(label);
+      //Sandbox.setPrivacyClearance(label);
+      app.ondone(function() { 
+          console.log("sandbox msg = "+app.result.msg);
+      });
+  //  });
+    </script>
+
+    <!-- doesn't have to be from localhost, but need to import it with
+    Sandbox.import in q.js otherwies -->
+    <script type="text/javascript">
+      try{
+      $("body").append('<img src="https://encrypted.google.com/images/srpr/logo11w.png">');
+      } catch (e) { console.log("can't add google image! woot!");}
+      try {
+      $.get("http://a.lvh.me:3000/")
+       .done(function(data) {
+         $("body").append("<br/>XHR main page prop result: "+data.prop);
+       })
+       .fail(function(data,stat,e) {
+         $("body").append("<br/>XHR main page error: "+e);
+       });
+      } catch(e) {
+        console.log("failed with"+e);
+      }
+    </script> 
+
+  </body>
+</html>

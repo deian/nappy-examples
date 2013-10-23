@@ -1,6 +1,8 @@
 console  = window.console;
 document = window.document;
 
+var count = 0;
+
 function main() {
   window.console.log("bank_app.js");
   done({msg : "privs="+Sandbox.privileges+"\nlabel="+Sandbox.getPrivacyLabel()});
@@ -12,8 +14,14 @@ function main() {
       console.log("w00t onload XHR");
     };
     reqA.open("get", "http://bank.lvh.me:3000/this_is_ok", true);
-    reqA.open("get", "http://bank.lvh.me:3000/this_is_ok", true);
     reqA.responseType = "json";
     reqA.send();
   } catch(e) { console.log("bank failed to XHR"); }
 }
+
+var interval = window.setInterval(function() {
+  if (count++ <  10)
+    main();
+  else 
+    clearInterval(interval);
+},1000);

@@ -16,11 +16,12 @@
     app.scheduleURI("http://bank.lvh.me:3000/bank_app.js");
     // 2. drop privileges
     Sandbox.privileges = new Privilege();
-    // 3. raise current label
+    // 3. raise current label & clearance
     Sandbox.setPrivacyLabel(bankLabel);
+    //Sandbox.setPrivacyClearance(bankLabel);
     app.ondone(function() { 
         console.log("sandbox msg = "+app.result.msg);
-        });
+    });
     </script>
 
     <!-- doesn't have to be from localhost, but need to import it with
