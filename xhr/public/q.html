@@ -19,10 +19,10 @@
       app.attachObject($, "$");
       app.scheduleURI("http://a.lvh.me:3000/q.js");
       // 2. drop privileges
-      Sandbox.privileges = new Privilege();
       // 3. raise current label & clearance
       Sandbox.setPrivacyLabel(label);
       Sandbox.setPrivacyClearance(label);
+      Sandbox.privileges = new Privilege();
       app.ondone(function() { 
           console.log("sandbox msg = "+app.result.msg);
       });

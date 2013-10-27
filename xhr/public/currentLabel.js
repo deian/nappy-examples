@@ -3,11 +3,14 @@
 // context menu
 (function() {
   function setNappyAttribute() {
-    if (this.Sandbox && Sandbox.isSandboxed()) {
+    try {
+    if (Sandbox.isSandboxed()) {
       document.body.setAttribute('data-nappy-current-privacy-label', Sandbox.getPrivacyLabel()+'');
       document.body.setAttribute('data-nappy-current-trust-label', Sandbox.getTrustLabel()+'');
     }
-    return true;
+    } catch(e) { }
   }
-  document.body.oncontextmenu = setNappyAttribute();
+//  document.body.addEventListener("oncontextmenu", setNappyAttribute);
+  window.oncontextmenu   = setNappyAttribute;
+  //document.body.onmousedown   = setNappyAttribute;
 })();

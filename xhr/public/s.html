@@ -7,7 +7,12 @@
     <script type="text/javascript">
       console.log("Enabling sandbox...");
       Sandbox.enableSandbox();
+      Sandbox.privileges = new Privilege();
       document.getElementById("current-label").textContent = Sandbox.getPrivacyLabel()+'';
+      setTimeout(function() {
+          Sandbox.setPrivacyLabel(new Label(window.location.origin));
+          document.getElementById("current-label").textContent = Sandbox.getPrivacyLabel()+'';
+      }, 5000);
     </script>
   </body>
 </html>
