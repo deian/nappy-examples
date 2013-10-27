@@ -1,30 +1,26 @@
-
 <!DOCTYPE HTML>
 <html>
   <head>
-  <meta charset="utf-8">
-  <meta http-equiv='document-label' CONTENT='[["a","b"],["c"]]'>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
   </head>
   <body>
-    <div id="log"></div>
     <script type="text/javascript">
-      var origin = window.location.origin;
-      function log(msg) {
-        var d = document.createElement("div");
-        d.appendChild(document.createTextNode(msg));
-        document.getElementById("log").appendChild(d);
-        console.log(msg);
-      }
-      function printCurLabel(nr) {
-        log(nr+': { LABEL: '+Sandbox.getPrivacyLabel() + ', ' +
-                             Sandbox.getTrustLabel()+
-               '; CLEAR: '+Sandbox.getPrivacyClearance() + ', ' + 
-                              Sandbox.getTrustClearance()+'}'+
-               '; PRIVS: '+Sandbox.privileges
-           )
-      }
 
-     printCurLabel(0);
+      var label = new Label(window.location.origin);
+      // 1. create privileged sandbox
+      var app = new Sandbox(label);
+      app.grant(Sandbox.privileges);
+      app.attachObject(window, "window");
+      app.scheduleURI("http://a.lvh.me:3000/k.js");
+      console.log("w00t");
+      Sandbox.setPrivacyLabel(label);
+      Sandbox.privileges = new Privilege();
+      // not the same as: 
+      //Sandbox.privileges = new Privilege();
+      //Sandbox.setPrivacyLabel(label);
+      // since the underlying principal changes and we can't access
+      // the object anymore
     </script>
+
   </body>
 </html>

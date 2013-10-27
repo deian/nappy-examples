@@ -26,6 +26,12 @@ var interval = window.setInterval(function() {
   } catch(e) { console.log("q.js failed to XHR"); }
 
   }
-  else 
-    window.clearInterval(interval);
-},10);
+  else  {
+    try {
+      window.clearInterval(interval);
+      return false;
+    } catch(e) {
+      console.log("q.js failed to clear interval: "+e);
+    }
+  }
+},1000);
