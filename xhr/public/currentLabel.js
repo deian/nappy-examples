@@ -4,13 +4,11 @@
 (function() {
   function setNappyAttribute() {
     try {
-    if (Sandbox.isSandboxed()) {
-      document.body.setAttribute('data-nappy-current-privacy-label', Sandbox.getPrivacyLabel()+'');
-      document.body.setAttribute('data-nappy-current-trust-label', Sandbox.getTrustLabel()+'');
-    }
+      if (Sandbox.isSandboxed()) {
+        document.body.setAttribute('data-nappy-current-privacy-label', Sandbox.getPrivacyLabel()+'');
+        document.body.setAttribute('data-nappy-current-trust-label', Sandbox.getTrustLabel()+'');
+      }
     } catch(e) { }
   }
-//  document.body.addEventListener("oncontextmenu", setNappyAttribute);
   window.oncontextmenu   = setNappyAttribute;
-  //document.body.onmousedown   = setNappyAttribute;
 })();

@@ -1,0 +1,19 @@
+
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  </head>
+  <body>
+    <!-- a.lvh.me -->
+    <div id="log"></div>
+    <iframe src="http://b.lvh.me:3001/t_iframe1.html" id="iframe1"></iframe>
+    <iframe src="http://c.lvh.me:3001/t_iframe2.html" id="iframe2"></iframe>
+   <script type="text/javascript">
+      Sandbox.enableSandbox();
+      setTimeout( function() {
+        Sandbox.setPrivacyLabel(new Label(window.location.origin));
+      }, 5000);
+   </script>
+  </body>
+</html>

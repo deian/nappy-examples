@@ -2,6 +2,8 @@ console = window.console;
 
 console.log("k.js!");
 
+document.getElementById("from-sandbox").textContent += "w00t";
+
 var count = 0;
 var interval = window.setInterval(function() {
   console.log("k.js count..."+count);

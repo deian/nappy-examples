@@ -4,15 +4,16 @@
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
   </head>
   <body>
+    <div id="from-sandbox">who </div>
     <script type="text/javascript">
 
-      var label = new Label(window.location.origin);
+      var label = new Label();//window.location.origin);
       // 1. create privileged sandbox
       var app = new Sandbox(label);
       app.grant(Sandbox.privileges);
       app.attachObject(window, "window");
+      app.attachObject(document, "document");
       app.scheduleURI("http://a.lvh.me:3000/k.js");
-      console.log("w00t");
       Sandbox.setPrivacyLabel(label);
       Sandbox.privileges = new Privilege();
       // not the same as: 
