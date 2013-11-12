@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8" lang="en"></head>
+  <body>
+    w00t
+    <script src="/jquery.min.js"></script>
+    <script type="text/javascript">
+      window.addEventListener("message", function(event) {
+          event.source.postMessage("pong","*");
+      } , false);
+
+
+      if(/ifc\./.test(window.location.hostname)) {
+        // IFC
+      var otherOrigin = window.location.protocol + "//" +
+                        window.location.hostname + ":" +
+                        (window.location.port === "3000"?"3001":"3000");
+        Sandbox.setPrivacyLabel(
+            new Label([new Role(window.location.origin),
+                       new Role(otherOrigin)]));
+      }
+
+      window.parent.postMessage("start","*");
+    </script>
+  </body>
+</html>

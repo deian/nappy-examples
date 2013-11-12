@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8" lang="en"></head>
+  <body>
+    <script src="/jquery.min.js"></script>
+    <script type="text/javascript">
+      "use strict";
+
+      var nrMessages = 0;
+      var startTime, endTime;
+      var otherOrigin = window.location.protocol + "//" +
+                        window.location.hostname + ":" +
+                        (window.location.port === "3000"?"3001":"3000");
+
+      // create cross-origin iframe:
+      $('<iframe />', {
+        name: 'child',
+        id:   'child',
+        src: otherOrigin +"/bench/iframe-ping-pong.child.html"
+      }).appendTo('body');
+
+      function handler(event) {
+        nrMessages++;
+        event.source.postMessage("ping","*");
+      }
+
+      function done() {
+        endTime = new Date;
+        window.removeEventListener("message", handler, false);
+        console.log("DONE!");
+        console.log("Number of messages: "+nrMessages);
+        console.log("Elapsed time: " + (endTime-startTime) + "ms");
+        console.log("Time/nr message: " + ((endTime-startTime)/nrMessages));
+      }
+
+      function start() {
+        // child is ready, remove start handler
+        window.removeEventListener("message", start, false);
+        // register counter
+        window.addEventListener("message", handler, false);
+
+        console.log("START!");
+        window.setTimeout(done, 10000);
+        startTime = new Date;
+        document.getElementById("child")
+                .contentWindow.postMessage("pong","*");
+      }
+
+      window.addEventListener("message", start, false);
+        
+      if(/ifc\./.test(window.location.hostname)) {
+        // IFC
+        Sandbox.setPrivacyLabel(
+            new Label([new Role(window.location.origin),
+                       new Role(otherOrigin)]));
+      }
+
+    </script>
+  </body>
+</html>
