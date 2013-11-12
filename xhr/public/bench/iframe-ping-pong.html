@@ -43,7 +43,7 @@
         window.setTimeout(done, 10000);
         startTime = new Date;
         document.getElementById("child")
-                .contentWindow.postMessage("pong","*");
+                .contentWindow.postMessage("ping","*");
       }
 
       window.addEventListener("message", start, false);

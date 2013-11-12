@@ -44,6 +44,7 @@
         '  \'req.responseType = "json";\'+'+
         '  \'req.send();\''+
         '  );'+
+        'Sandbox.setPrivacyLabel(Sandbox.getPrivacyClearance());'+
         'sA.ondone(function() {'+
         '  sB.ondone(function() {'+
         '    done({prop : sA.result.prop+sB.result.prop});'+

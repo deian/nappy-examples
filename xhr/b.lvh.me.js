@@ -11,7 +11,7 @@ var express = require('express'),
     app = express();
 
 app.get('/', function(req, res) {
-  console.log("req");
+  console.log("req: "+req.url);
   res.json({ prop: 456, woot: 'w00t' });
 
 });

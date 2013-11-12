@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8" lang="en"></head>
+  <body>
+    <script src="/jquery.min.js"></script>
+    <script type="text/javascript">
+      "use strict";
+
+      var nrMessages = 90, 
+          count = nrMessages;
+      var startTime, endTime;
+      var worker;
+
+      function handler() {
+        //console.log("handler..."+worker.result.message);
+        if ((count--)>0) {
+          worker.postMessage({message:"ping"});
+        } else {
+          done();
+        }
+      }
+
+      function done() {
+        endTime = new Date;
+        //window.removeEventListener("message", handler, false);
+        console.log("DONE!");
+        console.log("Number of messages: "+nrMessages);
+        console.log("Elapsed time: " + (endTime-startTime) + "ms");
+        console.log("Time/nr message: " + ((endTime-startTime)/nrMessages));
+      }
+
+
+
+
+      if(/ifc\./.test(window.location.hostname)) {
+        console.log("IFC..");
+        // IFC
+        Sandbox.enableSandbox();
+
+        worker = new Sandbox();
+        worker.scheduleURI(window.location.origin+"/bench/worker-ping-pong.ifc.js");
+        worker.ondone(handler);
+
+      } else {
+        worker = new Worker(window.location.origin+"/bench/worker-ping-pong.vanilla.js");
+        worker.onmessage = handler;
+      }
+
+
+      console.log("START!");
+      startTime = new Date;
+      worker.postMessage({message: "ping"});
+
+
+    </script>
+  </body>
+</html>
