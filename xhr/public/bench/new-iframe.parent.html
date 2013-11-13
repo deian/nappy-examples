@@ -13,7 +13,6 @@
 
       function handler(event) {
         endTime = new Date;
-        //console.log("DONE!  "+(endTime-startTime));
         window.parent.postMessage({time: (endTime-startTime)},"*");
       }
 
