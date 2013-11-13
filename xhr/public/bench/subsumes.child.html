@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8" lang="en"></head>
+  <body>
+    <script type="text/javascript">
+      "use strict";
+
+      var totalNr = 10000;
+      var startTime, endTime;
+
+      var a = [], b = [];
+      (function(){
+
+       function getRandomInt(min, max) {
+         return Math.floor(Math.random() * (max - min + 1) + min);
+       }
+       var i;
+       for(i=0;i<totalNr;i++) {
+         a[i] = new Label("http://a"+i+".com");
+         b[i] = new Label("http://b"+i+".com");
+         switch (getRandomInt(1,3)) {
+           case 1: b[i].and(a[i]);
+                   break;
+           case 2: b[i].or(a[i]);
+                   break;
+         }
+         switch (getRandomInt(1,3)) {
+           case 1: b[i].and(new Label("http://c"+i+".com"));
+                   break;
+           case 2: b[i].or(new Label("http://c"+i+".com"));
+                   break;
+         }
+         switch (getRandomInt(1,3)) {
+           case 1: a[i].and(new Label("http://d"+i+".com"));
+                   break;
+           case 2: a[i].or(new Label("http://d"+i+".com"));
+                   break;
+         }
+       }
+      })();
+
+      startTime = new Date;
+      (function(){
+       var i;
+       for(i=0;i<totalNr;i++) {
+          a[i].subsumes(b[i]);
+       }
+      })();
+      endTime = new Date;
+      window.parent.postMessage({time: (endTime-startTime)/totalNr},"*");
+
+    </script>
+  </body>
+</html>

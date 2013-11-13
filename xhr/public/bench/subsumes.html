@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8" lang="en"></head>
+  <body>
+    <script type="text/javascript" src="/jquery.min.js"></script>
+    <script type="text/javascript" src="/bench/psMathStats.min.js"></script>
+    <script type="text/javascript">
+      "use strict";
+
+      var totalNr = 50,
+          count   = 0,
+          measurements = [];
+
+      function handler(event) {
+        measurements[count++] = event.data.time;
+        if(count == totalNr) { done(); }
+      }
+      window.addEventListener("message", handler, false);
+
+      console.log("START!");
+
+      (function() {
+       // create iframes
+       for(var i=0; i < totalNr; i++) {
+          $('<iframe />', {
+            width:10,
+            height:10,
+            src: window.location.origin +"/bench/subsumes.child.html"
+          }).appendTo('body');
+        }
+      })();
+
+
+      function done() {
+        console.log("DONE!");
+        console.log("Number of measurements: "+measurements.length);
+        console.log("Mean time: "+ measurements.mean()); 
+        console.log("Median time: "+ measurements.median()); 
+        console.log("StdDev time: "+ measurements.stdDev()); 
+      }
+
+    </script>
+  </body>
+</html>
