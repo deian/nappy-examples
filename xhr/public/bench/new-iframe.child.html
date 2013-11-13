@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8" lang="en"></head>
+  <body>
+    <script type="text/javascript">
+      if(/ifc\./.test(window.location.hostname)) {
+        Sandbox.enableSandbox();
+      }
+
+      window.parent.postMessage("","*");
+    </script>
+  </body>
+</html>
