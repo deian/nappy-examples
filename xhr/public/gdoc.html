@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+  <head> 
+    <title>Encrypted GDocs</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <script src="/static/js/jquery.min.js"></script>
+    <script>
+    </script>
+    <style>
+     iframe { width:  90%; height: 450px; border: 0; }
+     body { background-color: black; }
+    </style>
+    <iframe src="http://crypto.lvh.me:3000/encryptor.html"></iframe>
+    <script>
+      function save(event) {
+        if (event.data.status === "save" && event.data.doc) {
+          var doc = event.data.doc;
+          console.log("saving document on server..."+doc);
+        }
+      }
+      window.addEventListener("message", save, false);
+    </script>
+  </body>
+</html>

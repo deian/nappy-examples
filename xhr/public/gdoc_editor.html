@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+  <head> 
+    <title>GDoc Editor</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <script src="/jquery.min.js"></script>
+    <style>
+     body { background-color: black; }
+    </style>
+    <form id="doc-form" action="#">
+      <textarea cols="80" rows="20" id="doc"></textarea>
+      <div>
+      <input type="button" id="doc-submit" value="save">
+    </div>
+    </form>
+    <script>
+      Sandbox.setPrivacyLabel(new Label([new Role("http://crypto.lvh.me:3000"),
+                                         new Role(window.location.origin)]));
+      window.parent.postMessage({status:"init"},"*");
+
+      window.addEventListener("message", handler, false);
+
+      function handler(event) {
+        console.log("editor got message");
+        if (event.data.status == "init") {
+          event.source.postMessage({ status: "init",
+                                     token: event.data.token},"*");
+        }
+      }
+      function saveDoc() {
+         var doc = $("#doc").val();
+         console.log("saving document..."+doc);
+         window.parent.postMessage({status:"save", doc:doc},"*");
+      }
+      $("#doc-submit").click(saveDoc);
+      $("#doc-form").submit(saveDoc);
+    </script>
+  </body>
+</html>

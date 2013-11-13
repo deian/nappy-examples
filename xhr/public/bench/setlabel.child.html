@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8" lang="en"></head>
+  <body>
+    <script type="text/javascript">
+      "use strict";
+
+      var totalNr = 10000;
+      var startTime, endTime;
+
+      Sandbox.enableSandbox();
+      startTime = new Date;
+      (function(){
+       var i;
+       for(i=0;i<totalNr;i++) {
+         Sandbox.setPrivacyLabel(new Label());
+       }
+      })();
+      endTime = new Date;
+      window.parent.postMessage({time: (endTime-startTime)/totalNr},"*");
+
+    </script>
+  </body>
+</html>
