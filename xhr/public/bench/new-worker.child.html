@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8" lang="en"></head>
+  <body>
+    <script type="text/javascript">
+      "use strict";
+
+      var startTime, endTime;
+
+      function handler(event) {
+        endTime = new Date;
+        window.parent.postMessage({time: (endTime-startTime)},"*");
+      }
+
+      if(/ifc\./.test(window.location.hostname)) {
+        Sandbox.enableSandbox();
+        var label = new Label();
+        startTime = new Date;
+        var worker = new Sandbox(label);
+        worker.schedule('done({done:true});');
+        worker.ondone(handler);
+      } else {
+        startTime = new Date;
+        var blob = new Blob(['postMessage({done:true});']);
+        var url = window.URL.createObjectURL(blob);
+        startTime  = new Date;
+        var worker = new Worker(url);
+        worker.onmessage = handler;
+      }
+
+    </script>
+  </body>
+</html>
