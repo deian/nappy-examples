@@ -2,7 +2,6 @@ var count = 0;
 
 function main() {
   window.console.log("bank_app.js");
-  done({msg : "privs="+Sandbox.privileges+"\nlabel="+Sandbox.getPrivacyLabel()});
 
   try {
   var reqA = new XMLHttpRequest();
