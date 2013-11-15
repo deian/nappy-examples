@@ -28,7 +28,16 @@
       var editor = document.getElementById("child");
 
       (function() { //authenticate!
-        var token = (new FreshPrivilege())+'';
+        function randomString(len, charSet) {
+          charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+          var randomString = '';
+          for (var i = 0; i < len; i++) {
+            var randomPoz = Math.floor(Math.random() * charSet.length);
+            randomString += charSet.substring(randomPoz,randomPoz+1);
+          }
+          return randomString;
+        }
+        var token = randomString(16);//(new FreshPrivilege())+'';
         function init(event) {
           //console.log("encryptor got message")
           if (event.data.status === "init") {
@@ -44,8 +53,10 @@
         }
         window.addEventListener("message", init, false);
 
-      Sandbox.setPrivacyLabel(new Label([new Role("http://gdocs.lvh.me:3000"),
-                                         new Role(window.location.origin)]));
+      if (this.Sandbox) {
+        Sandbox.setPrivacyLabel(new Label([new Role("http://gdocs.lvh.me:3000"),
+                                           new Role(window.location.origin)]));
+      }
         // initialize editor
       })();
       
@@ -56,10 +67,14 @@
           if (event.data.status === "save" && event.data.doc) {
             var doc = encrypt(event.data.doc);
             //console.log("saving encrypted document..."+doc);
-            var l = Sandbox.getPrivacyLabel();
-            Sandbox.setPrivacyLabel(new Label("http://gdocs.lvh.me:3000"));
+            if (this.Sandbox) {
+              var l = Sandbox.getPrivacyLabel(); //hoisting ftw
+              Sandbox.setPrivacyLabel(new Label("http://gdocs.lvh.me:3000"));
+            }
             window.parent.postMessage({status:"save", doc: doc},"*");
-            Sandbox.setPrivacyLabel(l);
+            if (this.Sandbox) {
+              Sandbox.setPrivacyLabel(l);
+            }
           }
         }
         window.addEventListener("message", save, false);
