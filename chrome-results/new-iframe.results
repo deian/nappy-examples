@@ -1,0 +1,20 @@
+def mean(x):
+  return sum(x)/len(x)
+
+vanilla = [ 50.3
+          , 49.8
+          , 51.8
+          ]
+unlabeled = [ 51.6
+            , 47.6
+            , 47
+            ]
+            
+labeled = [ 50.4
+          , 52
+          , 52.9
+          ]
+
+print mean(vanilla)
+print mean(unlabeled)
+print mean(labeled)

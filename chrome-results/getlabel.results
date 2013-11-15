@@ -1,0 +1,11 @@
+
+
+def mean(x):
+  return sum(x)/len(x)
+
+labeled = [ 0.0008400000000000005
+          , 0.0007000000000000005 
+          , 0.0009000000000000006 
+          ]
+
+print mean(labeled)
