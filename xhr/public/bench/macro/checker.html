@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8"></head>
+  <body>
+    <div id="log"></div>
+    <script type="text/javascript">
+      var starTtime, endTime;
+
+      function randomString(len, charSet) {
+        charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var randomString = '';
+        for (var i = 0; i < len; i++) {
+          var randomPoz = Math.floor(Math.random() * charSet.length);
+          randomString += charSet.substring(randomPoz,randomPoz+1);
+        }
+        return randomString;
+      }
+
+      var pass = randomString(16);
+
+      if(/ifc\./.test(window.location.hostname)) {
+        startTime = new Date;
+
+        var p = new FreshPrivilege(); Sandbox.own(p);
+        var box = new Sandbox(p.asLabel);
+        box.scheduleURI('http://checker.lvh.me:3000/bench/macro/checker.js');
+
+        box.postMessage({password: pass});
+        box.ondone(function() {
+            endTime = new Date;
+            //console.log("Duration: "+(endTime-startTime));
+            window.parent.postMessage({time: (endTime-startTime)},"*");
+        });
+      } else {
+        startTime = new Date;
+
+        var box = new Worker("checker.js");
+
+        box.postMessage({password: pass});
+        box.onmessage = function() {
+          endTime = new Date;
+          //console.log("Duration: "+(endTime-startTime));
+          window.parent.postMessage({time: (endTime-startTime)},"*");
+        };
+      }
+
+
+    </script>
+  </body>
+</html>
