@@ -1,1 +1,1 @@
-onmessage(function() { done({message:"pong"}); });
+onmessage = function() { postMessage({message:"pong"}); };

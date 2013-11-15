@@ -13,12 +13,13 @@
       }
 
       if(/ifc\./.test(window.location.hostname)) {
-        Sandbox.enableSandbox();
-        var label = new Label();
+        enableSandbox();
+        var label = new Label(new Role('a'));
+        setPrivacyLabel(label);
         startTime = new Date;
-        var worker = new Sandbox(label);
-        worker.schedule('done({done:true});');
-        worker.ondone(handler);
+        var worker = new Sandbox(false, label);
+        worker.addEventListener('message', handler);
+        worker.execute('postMessage({done:true});');
       } else {
         startTime = new Date;
         var blob = new Blob(['postMessage({done:true});']);

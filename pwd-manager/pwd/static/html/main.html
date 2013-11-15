@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-  <head> 
+  <head>
     <title>PwdManager - Untrusted password manager</title>
     <meta charset="utf-8">
   </head>
@@ -12,7 +12,7 @@
     <script src="/static/js/jquery.min.js"></script>
     <script>
 
-      //Sandbox.enableSandbox();
+      enableSandbox();
 
       $(function() {
         var pwdStorageURL = "http://storage.lvh.me:8082";
@@ -39,37 +39,11 @@
             iframe.appendTo('body');
             $("#master-key-submit").removeAttr("disabled");
 
-            try{ //ok
-              var req = new XMLHttpRequest();
-              req.onload = function() {
-                console.log("onload");//+this.response);
-              };
-              req.open("get", "http://a.lvh.me:3000/ok", true);
-              req.send();
-              console.log("req sent");
-            } catch (e) {
-              console.log("req failed "+e);
-            }
-
             // raise label
             // Make sure that the storage frame label is pwd /\ storage
-            Sandbox.setPrivacyLabel(new Label([new Role(appRefOrigin),
-                                               new Role(window.location.origin)]));
-            console.log("pwd principal: "+Sandbox.getPrincipal()+'');
-            console.log("pwd privs: "+Sandbox.privileges+'');
-            console.log("pwd label: "+Sandbox.getPrivacyLabel()+'');
-
-            try{ //fail
-              var req = new XMLHttpRequest();
-              req.onload = function() {
-                console.log("onload");//+this.response);
-              };
-              req.open("get", "http://a.lvh.me:3000/fail", true);
-              req.send();
-              console.log("req sent");
-            } catch (e) {
-              console.log("req failed "+e);
-            }
+            setPrivacyLabel(new Label([new Role(appRefOrigin),
+                                       new Role(window.location.origin)]));
+            console.log("pwd label: "+privacyLabel()+'');
 
             function sendMasterKey() {
 
@@ -100,12 +74,12 @@
 
 
             // lower label
-            Sandbox.setPrivacyLabel(new Label(appRefOrigin));
+            setPrivacyLabel(new Label(new Role(appRefOrigin)));
 
             try {
               appRef.postMessage({ username: u
                                  , password: p }, "*");
-              window.close();
+              //window.close();
             } catch(e) {
               console.log("pwd failed to send message to "+appRefOrigin+": "+e);
             }

@@ -1,5 +1,5 @@
-function decrypt(mp, data) {  
-  return data; 
+function decrypt(mp, data) {
+  return data;
 }
 
 function app(up, endpoint, manager) {
@@ -7,13 +7,12 @@ function app(up, endpoint, manager) {
   console.log("storage endpoint: " + endpoint);
 
   // Taint to storage /\ pwd
-  Sandbox.enableSandbox();
+  enableSandbox();
   // can just pass in:
-  Sandbox.setPrivacyLabel(new Label([ new Role(endpoint)
-                                    , new Role(manager)]));
-  console.log("storage principal: "+Sandbox.getPrincipal()+'');
-  console.log("storage privs: "+Sandbox.privileges+'');
-  console.log("storage label: "+Sandbox.getPrivacyLabel()+'');
+  setPrivacyLabel(new Label([ new Role(endpoint),
+                              new Role(manager)]));
+
+  console.log("storage label: "+privacyLabel()+'');
 
   function handleDecrypt(event) {
 
@@ -21,18 +20,6 @@ function app(up, endpoint, manager) {
 
     if (event.data.status !== "decrypt") {
       return;
-    }
-
-    try{ //fail
-      var req = new XMLHttpRequest();
-      req.onload = function() {
-        console.log("onload");//+this.response);
-      };
-      req.open("get", "http://a.lvh.me:3000/fail", true);
-      req.send();
-      console.log("req sent");
-    } catch (e) {
-      console.log("req failed "+e);
     }
 
     var master_password = event.data;

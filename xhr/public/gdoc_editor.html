@@ -16,11 +16,9 @@
     </div>
     </form>
     <script>
-      Sandbox.setPrivacyLabel(new Label([new Role("http://crypto.lvh.me:3000"),
+      setPrivacyLabel(new Label([new Role("http://crypto.lvh.me:3000"),
                                          new Role(window.location.origin)]));
       window.parent.postMessage({status:"init"},"*");
-
-      window.addEventListener("message", handler, false);
 
       function handler(event) {
         console.log("editor got message");
@@ -29,6 +27,7 @@
                                      token: event.data.token},"*");
         }
       }
+      window.addEventListener("message", handler, false);
       function saveDoc() {
          var doc = $("#doc").val();
          console.log("saving document..."+doc);

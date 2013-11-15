@@ -8,12 +8,12 @@
       var totalNr = 1000;
       var startTime, endTime;
 
-      Sandbox.enableSandbox();
+      enableSandbox();
       startTime = new Date;
       (function(){
        var i;
        for(i=0;i<totalNr;i++) {
-         Sandbox.getPrivacyLabel();
+         privacyLabel();
        }
       })();
       endTime = new Date;

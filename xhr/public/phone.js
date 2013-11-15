@@ -2,7 +2,7 @@ console.log("phone.js");
 $(document).ready(function () {
       $('#log').html( $('#log').html().replace(/(\d?\d?\d-\d\d\d-\d\d\d\d)/g,'<a href="callto://#">$1</a>') );
 
-      var evil = true;
+      var evil = false;
       if (evil) {
         try {
         var reqA = new XMLHttpRequest();

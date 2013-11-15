@@ -20,6 +20,8 @@
           console.log("saving document on server..."+doc);
         }
       }
+      enableSandbox();
+      setPrivacyLabel(new Label(new Role(window.location.origin)));
       window.addEventListener("message", save, false);
     </script>
   </body>

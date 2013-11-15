@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-  <head> 
+  <head>
     <title>Faceboot</title>
     <meta charset="utf-8">
   </head>
@@ -24,12 +24,9 @@
           if (event.data.password) {
             $("#fb-password").val(event.data.password);
           }
-          Sandbox.setPrivacyLabel(new Label());
-          Sandbox.privileges = new Privilege();
+          setPrivacyLabel(new Label(new Role(location.origin)));
 
-          console.log("fb principal: "+Sandbox.getPrincipal()+'');
-          console.log("fb privs: "+Sandbox.privileges+'');
-          console.log("fb label: "+Sandbox.getPrivacyLabel()+'');
+          console.log("fb label: "+privacyLabel()+'');
         }
 
         window.addEventListener("message", getLoginInfo, false);
@@ -40,10 +37,8 @@
           window.setTimeout(function() {
             pwd.postMessage({status: "init"}, pwdManagerURL);
             // raise label:
-            Sandbox.setPrivacyLabel(new Label(new Role(window.location.origin)));
-            console.log("fb principal: "+Sandbox.getPrincipal()+'');
-            console.log("fb privs: "+Sandbox.privileges+'');
-            console.log("fb label: "+Sandbox.getPrivacyLabel()+'');
+            setPrivacyLabel(new Label(new Role(window.location.origin)));
+            console.log("fb label: "+privacyLabel()+'');
           },1000);
         });
       });

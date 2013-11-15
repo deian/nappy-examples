@@ -13,6 +13,7 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script
     <script src="/jquery.min.js"></script>
     <script type="text/javascript">
       $(function() {
+      enableSandbox();
       function log(msg) {
         var d = document.createElement("div");
         d.appendChild(document.createTextNode(msg));
@@ -24,23 +25,21 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script
             '; CLEAR: '+Sandbox.getPrivacyClearance() + ', ' + Sandbox.getTrustClearance()+'}')
       }
 
-      var p = new FreshPrivilege();
-      Sandbox.own(p);
-      var box = new Sandbox(p.asLabel);
+      var p = freshPrivilege();
+      setPrivacyLabel(new Label(p));
+      var box = new Sandbox(false, new Label(p));
       //either:
-      box.scheduleURI('http://checker.lvh.me:3000/checker.js');
+      box.scheduleScript('http://checker.lvh.me:3000/checker.js');
       //or:
       //box.scheduleURI('http://checker.lvh.me:3000/checker2.js');
 
 
       function checkPassword() {
         console.log("checking...");
-        try {
-          box.postMessage({password: $("#password").val()});
-        } catch(e) { console.log("failed to postmessage: "+e); }
-        box.ondone(function() {
-          console.log(box.result.log);
-          var score = box.result.score;
+        box.addEventListener('message', function(message) {
+          var result = message.data
+          console.log('result: ' + result.log);
+          var score = result.score;
           var verdict = "";
           if(score < 0) {
              verdict = "failed"
@@ -55,9 +54,14 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script
           } else {
              verdict = "stronger"
           }
-	
+
           $("#score").text(verdict);
         });
+
+        try {
+          box.postMessage({password: $("#password").val()});
+        } catch(e) { console.log("failed to postmessage: "+e); }
+
         return false;
       }
       $("#check").click(checkPassword);

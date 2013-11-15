@@ -19,7 +19,7 @@
       window.addEventListener("message", handler, false);
         
       if(/ifc\./.test(window.location.hostname)) {
-        Sandbox.enableSandbox();
+        enableSandbox();
       }
 
       startTime = new Date;

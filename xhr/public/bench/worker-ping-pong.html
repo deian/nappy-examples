@@ -35,11 +35,11 @@
       if(/ifc\./.test(window.location.hostname)) {
         console.log("IFC..");
         // IFC
-        Sandbox.enableSandbox();
+        enableSandbox();
 
         worker = new Sandbox();
-        worker.scheduleURI(window.location.origin+"/bench/worker-ping-pong.ifc.js");
-        worker.ondone(handler);
+        worker.addEventListener('message', handler);
+        worker.scheduleScript(window.location.origin+"/bench/worker-ping-pong.ifc.js");
 
       } else {
         worker = new Worker(window.location.origin+"/bench/worker-ping-pong.vanilla.js");

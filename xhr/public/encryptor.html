@@ -18,7 +18,7 @@
       var editor = document.getElementById("child");
 
       (function() { //authenticate!
-        var token = (new FreshPrivilege())+'';
+        var token = freshPrivilege()+'';
         function init(event) {
           console.log("encryptor got message")
           if (event.data.status === "init") {
@@ -34,7 +34,7 @@
         }
         window.addEventListener("message", init, false);
 
-      Sandbox.setPrivacyLabel(new Label([new Role("http://gdocs.lvh.me:3000"),
+      setPrivacyLabel(new Label([new Role("http://gdocs.lvh.me:3000"),
                                          new Role(window.location.origin)]));
         // initialize editor
       })();
@@ -46,10 +46,10 @@
           if (event.data.status === "save" && event.data.doc) {
             var doc = encrypt(event.data.doc);
             console.log("saving encrypted document..."+doc);
-            var l = Sandbox.getPrivacyLabel();
-            Sandbox.setPrivacyLabel(new Label("http://gdocs.lvh.me:3000"));
+            var l = privacyLabel();
+            setPrivacyLabel(new Label(new Role("http://gdocs.lvh.me:3000")));
             window.parent.postMessage({status:"save", doc: doc},"*");
-            Sandbox.setPrivacyLabel(l);
+            setPrivacyLabel(l);
           }
         }
         window.addEventListener("message", save, false);

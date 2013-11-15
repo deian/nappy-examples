@@ -171,9 +171,8 @@ function testPassword(passwd) {
   return {score: intScore, log: strLog};
 }
 
-onmessage(function() {
-  var password = message.password || "";
-
-  done(testPassword(password));
-
+sandbox.addEventListener('message', function(message) {
+  var password = message.data.password || "";
+  var result = testPassword(password);
+  sandbox.postMessage(testPassword(password));
 });

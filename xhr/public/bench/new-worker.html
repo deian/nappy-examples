@@ -17,6 +17,12 @@
       }
       window.addEventListener("message", handler, false);
 
+      if(/ifc\./.test(window.location.hostname)) {
+        enableSandbox();
+        var label = new Label(new Role('a'));
+        setPrivacyLabel(label);
+      }
+
       console.log("START!");
 
       (function() {

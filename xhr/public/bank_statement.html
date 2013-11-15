@@ -4,24 +4,27 @@
   </head>
   <body>
     <script type="text/javascript">
+    enableSandbox();
+    console.log("privs="+window.privilege());
+    console.log("label="+window.privacyLabel());
 
-    console.log("privs="+Sandbox.privileges);
-    console.log("label="+Sandbox.getPrivacyLabel());
-
-    var bankLabel = new Label(window.location.origin);
+    var bankLabel = new Label(new Role(window.location.origin));
     // 1. create privileged sandbox
-    var app = new Sandbox(bankLabel);
-    app.grant(Sandbox.privileges);
-    app.attachObject(window, "window");
-    app.scheduleURI("http://bank.lvh.me:3000/bank_app.js");
-    // 2. drop privileges
-    Sandbox.privileges = new Privilege();
-    // 3. raise current label & clearance
-    Sandbox.setPrivacyLabel(bankLabel);
-    //Sandbox.setPrivacyClearance(bankLabel);
-    app.ondone(function() { 
-        console.log("sandbox msg = "+app.result.msg);
+    var app = new Sandbox(true, bankLabel);
+    app.grantPrivilege(privilege());
+
+    app.addEventListener('message', function(message) {
+        console.log("sandbox msg = "+message.data.msg);
     });
+
+    app.scheduleScript("http://bank.lvh.me:3000/bank_app.js");
+    // 2. drop privileges
+    dropPrivilege(privilege());
+    // 3. raise current label & clearance
+    setPrivacyLabel(bankLabel);
+
+
+    //Sandbox.setPrivacyClearance(bankLabel);
     </script>
 
     <!-- doesn't have to be from localhost, but need to import it with
