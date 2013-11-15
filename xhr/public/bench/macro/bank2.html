@@ -1,0 +1,58 @@
+
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8">
+    <script type="text/javascript">
+     var startTime = new Date, endTime;
+    </script>
+    <script type="text/javascript" src="http://bank.lvh.me:3000/jquery.min.js"></script>
+    <!-- as if from same origin -->
+    <script type="text/javascript">
+      var xhrDone = false, extDone = false;
+    </script>
+
+</head>
+  <body>
+    <script>
+      function handler(event) {
+        endTime = new Date;
+        //console.log("Duration: "+(endTime-startTime));
+        window.parent.postMessage({time: (endTime-startTime)},"*");
+      }
+      function done(result) {
+        if (result.msg == "ext") { extDone = true; }
+        if (result.msg == "xhr") { xhrDone = true; }
+          if (xhrDone && extDone) {
+            log("done: "+result.msg);
+            window.parent.postMessage("done", "*");
+          }
+      }
+    if (this.Sandbox && !this.unlabeled) {
+      // 1. create untrusted sandbox
+      var app = new Sandbox();
+      app.attachObject(window, "window");
+      app.attachObject(document, "document");
+      app.attachObject($, "$");
+      app.scheduleURI("http://bank.lvh.me:3000/bench/macro/phone2.js");
+      app.ondone(function() { 
+          done(app.result);
+      });
+    } else {
+      var script=document.createElement('script');
+      script.type='text/javascript';
+      script.src= "http://bank.lvh.me:3000/bench/macro/phone2.js";
+      $("body").append(script);
+    }
+      window.addEventListener("message", handler, false);
+    </script>
+    <div id="log">
+    <p> Welcome to bank.ch!</p>
+    <h3> Contact</h3>
+    <ul>
+      <li>US 1-123-4567</li>
+      <li>CA 2-345-6789</li>
+    </ul>
+  </div>
+    <iframe src="http://bank.lvh.me:3000/bench/macro/bank_statement2.html" id="statement"></iframe>
+  </body>
+</html>
