@@ -1,0 +1,22 @@
+
+def mean(x):
+  return sum(x)/len(x)
+
+# with 1000 messages:
+vanilla = [ 0.052
+          , 0.061
+          , 0.063
+          ]
+unlabeled = [ 0.052
+            , 0.055
+            , 0.057
+            ]
+# with 90 messages:
+labeled = [ 0.033
+          , 0.033
+          , 0.044
+          ]
+
+print mean(vanilla)
+print mean(unlabeled)
+print mean(labeled)
