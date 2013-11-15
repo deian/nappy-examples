@@ -55,24 +55,37 @@
          });
 // -------------------------------------------------------------------
        } else {
+         var doneA = false, doneB = false;
+         var propA, propB;
          var reqA = new XMLHttpRequest();
          reqA.onload = function() {
-           var reqB = new XMLHttpRequest();
-           var propA = this.response;
-           reqB.onload = function() {
-             var propB = this.response;
+           propA = this.response;
+           doneA = true;
+           if (doneB) {
              var result =  propA.prop + propB.prop;
              log("result = "+ result);
              endTime = new Date;
              console.log("Duration: "+(endTime-startTime));
-           };
-           reqB.open("get", "http://b.lvh.me:3001/", true);
-           reqB.responseType = "json";
-           reqB.send();
+           }
          };
          reqA.open("get", "http://a.lvh.me:3000/", true);
          reqA.responseType = "json";
          reqA.send();
+
+         var reqB = new XMLHttpRequest();
+         reqB.onload = function() {
+           propB = this.response;
+           doneB = true;
+           if (doneA) {
+             var result =  propA.prop + propB.prop;
+             log("result = "+ result);
+             endTime = new Date;
+             console.log("Duration: "+(endTime-startTime));
+           }
+         };
+         reqB.open("get", "http://b.lvh.me:3001/", true);
+         reqB.responseType = "json";
+         reqB.send();
        }
 
 
