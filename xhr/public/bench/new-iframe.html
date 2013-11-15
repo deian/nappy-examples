@@ -12,7 +12,8 @@
           measurements = [];
 
       function handler(event) {
-        measurements[count++] = event.data.time;
+        measurements[count] = event.data.time;
+        count++;
         if(count == totalNr) { done(); }
       }
       window.addEventListener("message", handler, false);
@@ -22,11 +23,13 @@
       (function() {
        // create iframes
        for(var i=0; i < totalNr; i++) {
+          setTimeout( function() {
           $('<iframe />', {
             width:10,
             height:10,
             src: window.location.origin +"/bench/new-iframe.parent.html"
           }).appendTo('body');
+          },i*1000);
         }
       })();
 
