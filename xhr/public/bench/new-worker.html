@@ -22,11 +22,13 @@
       (function() {
        // create iframes
        for(var i=0; i < totalNr; i++) {
+          setTimeout( function() {
           $('<iframe />', {
             width:10,
             height:10,
             src: window.location.origin +"/bench/new-worker.child.html"
           }).appendTo('body');
+          },i*1000);
         }
       })();
 
