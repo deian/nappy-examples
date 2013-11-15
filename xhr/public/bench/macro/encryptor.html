@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+  <head> 
+    <title>GDoc Encryptor</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <form id="master-key-form" action="#">
+      <label>Encryption password: <input id="password" type="password"> </label>
+    </form>
+    <script src="/sjcl.js"></script>
+    <style>
+     iframe { width:  90%; height: 350px; border: 0; }
+     body { background-color: gray; }
+    </style>
+    <iframe src="http://gdocs.lvh.me:3000/bench/macro/gdoc_editor.html" id="child"></iframe>
+    <script>
+      function randomString(len, charSet) {
+        charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var randomString = '';
+        for (var i = 0; i < len; i++) {
+          var randomPoz = Math.floor(Math.random() * charSet.length);
+          randomString += charSet.substring(randomPoz,randomPoz+1);
+        }
+        return randomString;
+      }
+      var password = randomString(16);
+      var editor = document.getElementById("child");
+
+      (function() { //authenticate!
+        var token = (new FreshPrivilege())+'';
+        function init(event) {
+          //console.log("encryptor got message")
+          if (event.data.status === "init") {
+            if (event.data.token === token) {
+              window.removeEventListener("message", init, false);
+              // call main function once we're authenticated:
+              authenticated();
+            } else {
+              editor.contentWindow.postMessage({ status: "init",
+                                                 token: token },"*");
+            }
+          }
+        }
+        window.addEventListener("message", init, false);
+
+      Sandbox.setPrivacyLabel(new Label([new Role("http://gdocs.lvh.me:3000"),
+                                         new Role(window.location.origin)]));
+        // initialize editor
+      })();
+      
+      function authenticated() {
+        //console.log("authenticated!");
+        function encrypt(data) { return sjcl.encrypt(password,data); }
+        function save(event) {
+          if (event.data.status === "save" && event.data.doc) {
+            var doc = encrypt(event.data.doc);
+            //console.log("saving encrypted document..."+doc);
+            var l = Sandbox.getPrivacyLabel();
+            Sandbox.setPrivacyLabel(new Label("http://gdocs.lvh.me:3000"));
+            window.parent.postMessage({status:"save", doc: doc},"*");
+            Sandbox.setPrivacyLabel(l);
+          }
+        }
+        window.addEventListener("message", save, false);
+
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+  <head> 
+    <title>Encrypted GDocs</title>
+    <meta charset="utf-8">
+         <script type="text/javascript">
+          var startTime = new Date, endTime;
+         </script>
+  </head>
+  <body>
+    <style>
+     iframe { width:  90%; height: 450px; border: 0; }
+     body { background-color: black; }
+    </style>
+    <iframe src="http://crypto.lvh.me:3000/bench/macro/encryptor.html"></iframe>
+    <script>
+      function save(event) {
+        if (event.data.status === "save" && event.data.doc) {
+          var doc = event.data.doc;
+          //console.log("saving document on server..."+doc);
+          endTime = new Date;
+          //console.log("Duration: "+(endTime-startTime));
+          window.parent.postMessage({time: (endTime-startTime)},"*");
+        }
+      }
+      window.addEventListener("message", save, false);
+    </script>
+  </body>
+</html>

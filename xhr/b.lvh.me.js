@@ -12,6 +12,7 @@ var express = require('express'),
 
 app.get('/', function(req, res) {
   console.log("req: "+req.url);
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.json({ prop: 456, woot: 'w00t' });
 
 });

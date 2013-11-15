@@ -41,7 +41,6 @@ app.configure(function(){
       */
 
 
-      //res.setHeader("Access-Control-Allow-Origin", "*");
       return next();
     });
     app.use(express.static(__dirname+"/public", {maxAge:0}));
@@ -50,6 +49,7 @@ app.configure(function(){
 
 app.get('/', function(req, res) {
   console.log("req: "+req.url);
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.json({ prop: 123, woot: 'w00t' });
 
 });
