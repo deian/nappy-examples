@@ -171,14 +171,7 @@ function testPassword(passwd) {
   return {score: intScore, log: strLog};
 }
 
-if(!onmessage) {
-  onmessage = function (event) {
-    var password = event.data.password || "";
-    postMessage(testPassword(password));
-  };
-} else {
-  onmessage(function () {
-    var password = message.password || "";
-    done(testPassword(password));
-  });
-}
+onmessage = function (event) {
+  var password = event.data.password || "";
+  postMessage(testPassword(password));
+};

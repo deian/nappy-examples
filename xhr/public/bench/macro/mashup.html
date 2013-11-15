@@ -17,12 +17,12 @@
       var origin = window.location.origin;
 
       if(/ifc\./.test(window.location.hostname)) {
-        var sAB = new Sandbox(new Label([new Role("http://a.lvh.me:3000"), 
+        var sAB = new Sandbox(false, new Label([new Role("http://a.lvh.me:3000"),
                                          new Role("http://b.lvh.me:3001")]));
 
-        sAB.schedule(
-          'var sA  = new Sandbox(new Label(new Role("http://a.lvh.me:3000")));'+
-          'sA.schedule('+
+        sAB.execute(
+          'var sA  = new Sandbox(false, new Label(new Role("http://a.lvh.me:3000")));'+
+          'sA.execute('+
           '  \'var req = new XMLHttpRequest();\'+'+
           '  \'req.onload = function() { \'+'+
           '  \' done(this.response);\'+'+
@@ -31,8 +31,8 @@
           '  \'req.responseType = "json";\'+'+
           '  \'req.send();\''+
           '  );'+
-          'var sB  = new Sandbox(new Label(new Role("http://b.lvh.me:3001")));'+
-          'sB.schedule('+
+          'var sB  = new Sandbox(false, new Label(new Role("http://b.lvh.me:3001")));'+
+          'sB.execute('+
           '  \'var req = new XMLHttpRequest();\'+'+
           '  \'req.onload = function() { \'+'+
           '  \' done(this.response);\'+'+
@@ -41,18 +41,18 @@
           '  \'req.responseType = "json";\'+'+
           '  \'req.send();\''+
           '  );'+
-          'Sandbox.setPrivacyLabel(Sandbox.getPrivacyClearance());'+
-          'sA.ondone(function() {'+
-          '  sB.ondone(function() {'+
+          'setPrivacyLabel(privacyClearance());'+
+          'sA.onmessage = function() {'+
+          '  sB.onmessage = function() {'+
           '    done({prop : sA.result.prop+sB.result.prop});'+
-          '}); });'
+          '}; };'
         );
 
-         sAB.ondone(function() {
+         sAB.onmessage = function() {
              log("result = "+sAB.result.prop);
              endTime = new Date;
              console.log("Duration: "+(endTime-startTime));
-         });
+         };
 // -------------------------------------------------------------------
        } else {
          var doneA = false, doneB = false;

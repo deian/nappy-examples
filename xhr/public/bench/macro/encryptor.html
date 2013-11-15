@@ -53,8 +53,8 @@
         }
         window.addEventListener("message", init, false);
 
-      if (this.Sandbox && !this.unlabeled) {
-        Sandbox.setPrivacyLabel(new Label([new Role("http://gdocs.lvh.me:3000"),
+      if (this.privilege) {
+        setPrivacyLabel(new Label([new Role("http://gdocs.lvh.me:3000"),
                                            new Role(window.location.origin)]));
       }
         // initialize editor
@@ -67,13 +67,13 @@
           if (event.data.status === "save" && event.data.doc) {
             var doc = encrypt(event.data.doc);
             //console.log("saving encrypted document..."+doc);
-            if (this.Sandbox && !this.unlabeled) {
-              var l = Sandbox.getPrivacyLabel(); //hoisting ftw
-              Sandbox.setPrivacyLabel(new Label("http://gdocs.lvh.me:3000"));
+            if (privilege) {
+              var l = privacyLabel(); //hoisting ftw
+              setPrivacyLabel(new Label(new Role("http://gdocs.lvh.me:3000")));
             }
             window.parent.postMessage({status:"save", doc: doc},"*");
-            if (this.Sandbox && !this.unlabeled) {
-              Sandbox.setPrivacyLabel(l);
+            if (privilege) {
+              setPrivacyLabel(l);
             }
           }
         }

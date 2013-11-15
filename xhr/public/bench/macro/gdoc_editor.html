@@ -15,9 +15,9 @@
     </div>
     </form>
     <script>
-      if (this.Sandbox && !this.unlabeled) {
-        Sandbox.setPrivacyLabel(new Label([new Role("http://crypto.lvh.me:3000"),
-                                           new Role(window.location.origin)]));
+      if (privilege) {
+        setPrivacyLabel(new Label([new Role("http://crypto.lvh.me:3000"),
+                                   new Role(window.location.origin)]));
       }
       window.parent.postMessage({status:"init"},"*");
 

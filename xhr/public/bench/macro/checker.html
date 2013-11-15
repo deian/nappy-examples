@@ -21,16 +21,19 @@
       if(/ifc\./.test(window.location.hostname)) {
         startTime = new Date;
 
-        var p = new FreshPrivilege(); Sandbox.own(p);
-        var box = new Sandbox(p.asLabel);
-        box.scheduleURI('http://checker.lvh.me:3000/bench/macro/checker.js');
+        var p = freshPrivilege();
+        var l = new Label(p);
+        setPrivacyLabel(l);
+        var box = new Sandbox(false, l);
+        box.scheduleScript('http://checker.lvh.me:3000/bench/macro/checker.js');
 
-        box.postMessage({password: pass});
-        box.ondone(function() {
+        box.onmessage = function() {
             endTime = new Date;
             //console.log("Duration: "+(endTime-startTime));
+            setPrivacyLabel(new Label());
             window.parent.postMessage({time: (endTime-startTime)},"*");
-        });
+        };
+        box.postMessage({password: pass});
       } else {
         startTime = new Date;
 

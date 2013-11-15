@@ -7,6 +7,10 @@
     <script type="text/javascript">
       "use strict";
 
+      if (privilege) {
+        setPrivacyLabel(new Label(new Role(window.location.origin)));
+      }
+
       var totalNr = 10,
           count   = 0,
           measurements = [];

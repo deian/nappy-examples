@@ -6,7 +6,9 @@
     <script type="text/javascript" src="/bench/psMathStats.min.js"></script>
     <script type="text/javascript">
       "use strict";
-
+      if(/ifc\./.test(window.location.hostname)) {
+        enableSandbox();
+      }
       var totalNr = 10,
           count   = 0,
           measurements = [];
