@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+  <head> <meta charset="utf-8">
+         <script type="text/javascript">
+          var startTime = new Date, endTime;
+         </script>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script type="text/javascript">
+      function log(msg) {
+        var d = document.createElement("div");
+        d.appendChild(document.createTextNode(msg));
+        document.getElementById("log").appendChild(d);
+        console.log(msg);
+      }
+      var origin = window.location.origin;
+
+      if(/ifc\./.test(window.location.hostname)) {
+        var sAB = new Sandbox(new Label([new Role("http://a.lvh.me:3000"), 
+                                         new Role("http://b.lvh.me:3001")]));
+
+        sAB.schedule(
+          'var sA  = new Sandbox(new Label(new Role("http://a.lvh.me:3000")));'+
+          'sA.schedule('+
+          '  \'var req = new XMLHttpRequest();\'+'+
+          '  \'req.onload = function() { \'+'+
+          '  \' done(this.response);\'+'+
+          '  \'};\'+'+
+          '  \'req.open("get", "http://a.lvh.me:3000/", true);\'+'+
+          '  \'req.responseType = "json";\'+'+
+          '  \'req.send();\''+
+          '  );'+
+          'var sB  = new Sandbox(new Label(new Role("http://b.lvh.me:3001")));'+
+          'sB.schedule('+
+          '  \'var req = new XMLHttpRequest();\'+'+
+          '  \'req.onload = function() { \'+'+
+          '  \' done(this.response);\'+'+
+          '  \'};\'+'+
+          '  \'req.open("get", "http://b.lvh.me:3001/", true);\'+'+
+          '  \'req.responseType = "json";\'+'+
+          '  \'req.send();\''+
+          '  );'+
+          'Sandbox.setPrivacyLabel(Sandbox.getPrivacyClearance());'+
+          'sA.ondone(function() {'+
+          '  sB.ondone(function() {'+
+          '    done({prop : sA.result.prop+sB.result.prop});'+
+          '}); });'
+        );
+
+         sAB.ondone(function() {
+             log("result = "+sAB.result.prop);
+             endTime = new Date;
+             console.log("Duration: "+(endTime-startTime));
+         });
+// -------------------------------------------------------------------
+       } else {
+         var reqA = new XMLHttpRequest();
+         reqA.onload = function() {
+           var reqB = new XMLHttpRequest();
+           var propA = this.response;
+           reqB.onload = function() {
+             var propB = this.response;
+             var result =  propA.prop + propB.prop;
+             log("result = "+ result);
+             endTime = new Date;
+             console.log("Duration: "+(endTime-startTime));
+           };
+           reqB.open("get", "http://b.lvh.me:3001/", true);
+           reqB.responseType = "json";
+           reqB.send();
+         };
+         reqA.open("get", "http://a.lvh.me:3000/", true);
+         reqA.responseType = "json";
+         reqA.send();
+       }
+
+
+
+
+    </script>
+  </body>
+</html>
